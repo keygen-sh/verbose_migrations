@@ -41,7 +41,7 @@ RSpec.describe VerboseMigrations do
       migration.verbose!(logger:)
 
       expect { instance.migrate(:up) }.to(
-        transition(logger, :level).through [Logger::UNKNOWN, Logger::DEBUG, Logger::UNKNOWN]
+        transition { logger.level }.through [Logger::UNKNOWN, Logger::DEBUG, Logger::UNKNOWN]
       )
     end
 
@@ -49,7 +49,7 @@ RSpec.describe VerboseMigrations do
       migration.verbose!(level: Logger::INFO)
 
       expect { instance.migrate(:up) }.to(
-        transition(logger, :level).through [Logger::UNKNOWN, Logger::INFO, Logger::UNKNOWN]
+        transition { logger.level }.through [Logger::UNKNOWN, Logger::INFO, Logger::UNKNOWN]
       )
     end
 
@@ -60,7 +60,7 @@ RSpec.describe VerboseMigrations do
       migration.verbose!(logger: verbose_logger)
 
       expect { migration.new.migrate(:up) }.to(
-        transition(verbose_logger, :level).through([Logger::UNKNOWN, Logger::DEBUG, Logger::UNKNOWN]).and(
+        transition { verbose_logger.level }.through(Logger::UNKNOWN, Logger::DEBUG, Logger::UNKNOWN).and(
           not_change { logger.level },
         ),
       )
