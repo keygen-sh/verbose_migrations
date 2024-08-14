@@ -42,7 +42,13 @@ $ gem install verbose_migrations
 ## Usage
 
 ```ruby
+class SeedTagsFromPosts < ActiveRecord::Migration[7.1]
+  verbose!
 
+  def up
+    # ...
+  end
+end
 ```
 
 ## Supported Rubies
