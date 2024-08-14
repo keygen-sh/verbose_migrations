@@ -7,8 +7,8 @@ Gem::Specification.new do |spec|
   spec.version     = VerboseMigrations::VERSION
   spec.authors     = ['Zeke Gabrielse']
   spec.email       = ['oss@keygen.sh']
-  spec.summary     = 'Set Active Record logger to DEBUG mode during Active Record migrations.'
-  spec.description = 'Override Active Record logger to DEBUG mode during Active Record migrations to easily follow along and spot blocking queries in a migration.'
+  spec.summary     = 'Enable verbose logging for Active Record migrations, regardless of configured log level, to monitor query speed and execution.'
+  spec.description = 'Enable verbose logging for Active Record migrations, regardless of configured log level. Monitor query speed, query execution, and overall progress when executing long running or otherwise risky migrations.'
   spec.homepage    = 'https://github.com/keygen-sh/verbose_migrations'
   spec.license     = 'MIT'
 

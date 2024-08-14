@@ -3,9 +3,9 @@
 [![CI](https://github.com/keygen-sh/verbose_migrations/actions/workflows/test.yml/badge.svg)](https://github.com/keygen-sh/verbose_migrations/actions)
 [![Gem Version](https://badge.fury.io/rb/verbose_migrations.svg)](https://badge.fury.io/rb/verbose_migrations)
 
-Override Active Record logger to `DEBUG` mode during Active Record migrations
-to easily follow along and spot blocking queries in a migration, even when the
-logger is set to e.g. `WARN`.
+Enable verbose logging for Active Record migrations, regardless of configured
+log level. Monitor query speed, query execution, and overall progress when
+executing long running or otherwise risky migrations.
 
 This gem was extracted from [Keygen](https://keygen.sh).
 
