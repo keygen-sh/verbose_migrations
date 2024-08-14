@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "lib/verbose_migrations/version"
+require_relative 'lib/verbose_migrations/version'
 
 Gem::Specification.new do |spec|
   spec.name        = 'verbose_migrations'
