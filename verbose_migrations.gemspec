@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors     = ['Zeke Gabrielse']
   spec.email       = ['oss@keygen.sh']
   spec.summary     = 'Set Active Record logger to DEBUG mode during Active Record migrations.'
-  spec.description = 'Override Active Record logger to DEBUG mode during Active Record migrations to easily follow along and spot blocking queries in a migration, even when the logger is set to e.g. WARN.'
+  spec.description = 'Override Active Record logger to DEBUG mode during Active Record migrations to easily follow along and spot blocking queries in a migration.'
   spec.homepage    = 'https://github.com/keygen-sh/verbose_migrations'
   spec.license     = 'MIT'
 
