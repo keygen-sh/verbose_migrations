@@ -19,6 +19,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rails', '>= 6.0'
 
   spec.add_development_dependency 'rspec-rails'
+  spec.add_development_dependency 'transition_through', '1.0.0.pre.beta.1'
   spec.add_development_dependency 'sqlite3', '~> 1.4'
   spec.add_development_dependency 'prism'
 end
