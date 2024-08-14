@@ -61,7 +61,7 @@ RSpec.describe VerboseMigrations do
 
       expect { migration.new.migrate(:up) }.to(
         transition { verbose_logger.level }.through(Logger::UNKNOWN, Logger::DEBUG, Logger::UNKNOWN).and(
-          not_change { logger.level },
+          transition { logger.level }.nowhere,
         ),
       )
 

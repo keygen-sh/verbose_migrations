@@ -17,8 +17,6 @@ ActiveRecord::Base.establish_connection(
   database: ':memory:',
 )
 
-RSpec::Matchers.define_negated_matcher :not_change, :change
-
 RSpec.configure do |config|
   config.include TransitionThrough::Methods
 
