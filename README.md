@@ -42,13 +42,57 @@ $ gem install verbose_migrations
 ## Usage
 
 ```ruby
-class SeedTagsFromPosts < ActiveRecord::Migration[7.1]
+class SeedTagsFromPosts < ActiveRecord::Migration[7.2]
+  disable_ddl_transaction!
   verbose!
 
   def up
-    # ...
+    update_count = nil
+    batch_count  = 0
+
+    until update_count == 0
+      batch_count  += 1
+      update_count  = exec_update(<<~SQL.squish, batch_count:, batch_size: 10_000)
+        WITH batch AS (
+          SELECT id, unnest(tags) AS tag_name
+          FROM posts
+          WHERE tags IS NOT NULL
+          LIMIT :batch_size
+        ), inserted_tags AS (
+          INSERT INTO tags (name)
+          SELECT DISTINCT tag_name
+          FROM batch
+          ON CONFLICT (name) DO NOTHING
+          RETURNING id, name
+        )
+        INSERT INTO post_tags (post_id, tag_id)
+        SELECT batch.id, tags.id
+        FROM batch
+        JOIN tags ON tags.name = batch.tag_name
+        /* batch=:batch_count */
+      SQL
+    end
   end
 end
+
+```
+
+Before, you have a black box:
+
+```
+== 20240817010101 SeedTagsFromPosts: migrating ================================
+== 20240817010101 SeedTagsFromPosts: migrated (42.0312s) =======================
+```
+
+After, you see progress:
+
+```
+== 20240817010101 SeedTagsFromPosts: migrating ================================
+==> DEBUG -- : (2.2ms) WITH batch AS ( SELECT id, unnest(tags) AS tag_name FROM posts WHERE tags IS NOT NULL LIMIT 10000 ), inserted_tags AS ( INSERT INTO tags (name) SELECT DISTINCT tag_name FROM batch ON CONFLICT (name) DO NOTHING RETURNING id, name ) INSERT INTO post_tags (post_id, tag_id) SELECT batch.id, tags.id FROM batch JOIN tags ON tags.name = batch.tag_name /* batch=1 */
+==> DEBUG -- : (1.1ms) WITH batch AS ( SELECT id, unnest(tags) AS tag_name FROM posts WHERE tags IS NOT NULL LIMIT 10000 ), inserted_tags AS ( INSERT INTO tags (name) SELECT DISTINCT tag_name FROM batch ON CONFLICT (name) DO NOTHING RETURNING id, name ) INSERT INTO post_tags (post_id, tag_id) SELECT batch.id, tags.id FROM batch JOIN tags ON tags.name = batch.tag_name /* batch=2 */
+==> DEBUG -- : (1.3ms) WITH batch AS ( SELECT id, unnest(tags) AS tag_name FROM posts WHERE tags IS NOT NULL LIMIT 10000 ), inserted_tags AS ( INSERT INTO tags (name) SELECT DISTINCT tag_name FROM batch ON CONFLICT (name) DO NOTHING RETURNING id, name ) INSERT INTO post_tags (post_id, tag_id) SELECT batch.id, tags.id FROM batch JOIN tags ON tags.name = batch.tag_name /* batch=3 */
+==> DEBUG -- : (1.7ms) ...
+== 20240817010101 SeedTagsFromPosts: migrated (42.0312s) =======================
 ```
 
 ## Supported Rubies
