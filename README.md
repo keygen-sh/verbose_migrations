@@ -41,6 +41,9 @@ $ gem install verbose_migrations
 
 ## Usage
 
+Use the `verbose!` class method to enable debug logging. It accepts an optional log
+`level:` and `logger:`.
+
 ```ruby
 class SeedTagsFromPosts < ActiveRecord::Migration[7.2]
   disable_ddl_transaction!
